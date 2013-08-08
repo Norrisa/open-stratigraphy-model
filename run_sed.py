@@ -1,55 +1,48 @@
 from sediment import *
-import re
+import libspud
 import sys
 
 #should be an osml file
-infile = open(sys.argv[1],'r')
-lines = infile.readlines()
-infile.close()
+try: 
+  libspud.load_options('test15.osml')
+except:
+	print "This file doesn't exist or is the wrong file type. It should be a .osml file"
+	sys.exit()
 
-#Remove the top and bottom lines of the file
-del lines[:7]
-del lines[13:]
-#Remove the lines that do not have data in that is needed in the equation
-del lines[11]
-del lines[9]
-del lines[8]
-del lines[7]
-del lines[5]
-del lines[4]
-del lines[3]
-
-#Extract the relevent information
-start_string = str(lines[0])
-startg = re.search('>(.+?)<', start_string)
-end_string = str(lines[1])
-endg = re.search('>(.+?)<', end_string)
-time_step_string = str(lines[2])
-time_stepg = re.search('>(.+?)<', time_step_string)
-mesh_string = str(lines[3])
-meshg = re.search('>(.+?)<', mesh_string)
-alpha_string = str(lines[4])
-alphag = re.search('>(.+?)<', alpha_string)
-initial_conditions_string = str(lines[5])
-initial_conditionsg = re.search('>(.+?)<', initial_conditions_string)
-
-#Convert it to the desired data type
-start = float(startg.group(1)) 
-end = float(endg.group(1)) 
-time_step = float(time_stepg.group(1)) 
-mesh = int(meshg.group(1)) 
-alpha = float(alphag.group(1)) 
-initial_conditions = str(initial_conditionsg.group(1)) 
-
-
+try:
+	start = float(libspud.get_option('/diffusion_model/timestepping/start_time',))
+	end = float(libspud.get_option('/diffusion_model/timestepping/end_time'))
+	time_step = float(libspud.get_option('/diffusion_model/timestepping/timestep'))
+	mesh_int = int(libspud.get_option('/diffusion_model/mesh/initial_mesh_size'))
+	alpha = float(libspud.get_option('/diffusion_model/model_parameters/diffusion_coefficient'))
+	initial_conditions = str(libspud.get_option('/diffusion_model/model_parameters/initial_conditions'))
+except: 
+	print 'The information provided was incomplete, please recreate the file'
+	sys.exit()
+	
+if ((start-end) >= 0):
+	print 'The start time is after the end time'
+	sys.exit()
+elif (time_step == 0):
+	print 'The time step cannot be 0'
+	sys.exit()
+elif (mesh_int == 0):
+	print 'The mesh has to have a size greater than 0'
+	sys.exit()
+elif ((end - start) <= time_step):
+	print 'The time step is too large for the total time'
+	sys.exit()
+	
 #create a simple testcase
 model = SedimentModel()
-mesh = UnitSquareMesh(mesh,mesh)
+mesh = UnitSquareMesh(mesh_int,mesh_int)
 model.set_mesh(mesh)
 init_cond = Expression(initial_conditions) # simple slope
 init_sed = Expression('x[0]') # this gives
 # total of above gives a slope of 0 to 2 (over the unit square)
 model.set_initial_conditions(init_cond,init_sed)
+#model.set_start_time(start)
+model.set_timestep(time_step)
 model.set_end_time(end)
 model.set_diffusion_coeff(alpha)
 model.init()
@@ -57,5 +50,4 @@ model.solve()
 # answer should be 1 everywhere
 plot(model.get_total_height(),interactive=True)
 print model.get_total_height_array()
-
 
