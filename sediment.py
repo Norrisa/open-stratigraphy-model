@@ -39,6 +39,9 @@ class SedimentModel:
         self.h0 = topography
         self.s0 = sediment
 
+    def set_start_time(self,start):
+        self.start_time = start 
+
     def set_timestep(self,dt):
         self.dt = dt
 
@@ -52,9 +55,13 @@ class SedimentModel:
         tiny = 1e-10
 
         # initial guess of solution
-        self.s_1 = interpolate(self.s0, self.V)
+        try:
+            self.s_1 = interpolate(self.s0, self.V)
+            self.h = interpolate(self.h0, self.V)
+        except:
+            print 'Your initial condition was not a number or an expression'
+            sys.exit()
         self.s = TrialFunction(self.V)
-        self.h = interpolate(self.h0, self.V)
 
         if (plot_init):
             plot(self.get_sed_height(),interactive=True)
@@ -87,7 +94,7 @@ class SedimentModel:
 
     def solve(self):
         """Solve the problem"""
-        t = 0
+        t = self.start_time
         while t <= self.T:
             self.b = assemble(self.L, exterior_facet_domains=self.exterior_facet_domains)
             solve(self.A, self.s.vector(), self.b)
