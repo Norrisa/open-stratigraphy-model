@@ -15,7 +15,7 @@
       </initial_mesh_size>
     </mesh>
     <model_parameters>
-      <diffusion_coefficient>10000</diffusion_coefficient>
+      <diffusion_coefficient>10000000000000000000000000000000000000000000000000000000000000000000000000000000000</diffusion_coefficient>
       <initial_conditions>
         <string_value lines="1">x[0]</string_value>
       </initial_conditions>

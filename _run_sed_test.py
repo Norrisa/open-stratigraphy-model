@@ -13,7 +13,7 @@ class run_sed(unittest.TestCase):  #very large input
 		self.assertEqual(end,10)
 		self.assertEqual(time_step,1)
 		self.assertEqual(mesh_int,10)
-		self.assertEqual(alpha,10000)
+		self.assertEqual(alpha,10000000000000000000000000000000000000000000000000000000000000000000000000000000000)
 		self.assertEqual(initial_conditions,'x[0]')
 	def test2(self):   #0's in all the times
 		with self.assertRaises(SystemExit):
