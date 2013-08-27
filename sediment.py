@@ -20,6 +20,7 @@ class SedimentModel:
         self.FacetNorm = None
         self.mesh = None
         self.s0 = None
+        self.start_time = 0
         self.end_time = 1
         self.dt = 1
         self.alpha = Constant(1)
@@ -29,7 +30,7 @@ class SedimentModel:
     def set_mesh(self,mesh):
         """Set which mesh to use and define function space"""
         self.mesh = mesh
-        self.V = FunctionSpace(self.mesh, "Lagrange", 2)
+        self.V = FunctionSpace(self.mesh, "Lagrange", 1)
         self.n = FacetNormal(self.mesh)
 
 
@@ -60,7 +61,7 @@ class SedimentModel:
             self.h = interpolate(self.h0, self.V)
         except:
             print 'Your initial condition was not a number or an expression'
-            sys.exit()
+            sys.exit()       
         self.s = TrialFunction(self.V)
 
         if (plot_init):
@@ -103,8 +104,8 @@ class SedimentModel:
             t += self.dt
             #plot(u, interactive=True)
             self.s_1.assign(self.s)
-            if (t%self.output_time == 0):
-                plot(self.get_total_height(),interactive=True)
+            #if (t%self.output_time == 0):
+                #plot(self.get_total_height(),interactive=True)
 
     def get_total_height_array(self):
         return self.s_1.vector().array()+self.h.vector().array()
@@ -137,7 +138,7 @@ if __name__ == "__main__":
     mesh = UnitInterval(100)
     model.set_mesh(mesh)
     init_cond = Expression('0') # simple slope
-    init_sed = Expression('0') # this gives
+    init_sed = Expression('5') # this gives
     # total of above gives a slope of 0 to 2 (over the unit square)
     model.set_initial_conditions(init_cond,init_sed)
     model.set_end_time(10)
@@ -147,5 +148,4 @@ if __name__ == "__main__":
     # answer should be 1 everywhere
     plot(model.get_sed_height(),interactive=True)
     print model.get_sed_height_array()
-
-
+    
