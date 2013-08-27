@@ -1,0 +1,17 @@
+test1 - very large input
+test2 - 0's in all the times
+test 3 - 0 in the time step
+test4 - 0 as the initial conditions
+test5 - 0 as the mesh
+test6 - 0 as the diffusion coefficient
+test7 - inintial condition number
+test8 - initial condition function
+test9 - initial condition letter
+test10 - initial condition missing bracket
+test11 - initial condition missing bracket
+test12 - incorrect file name no file
+test13 - incorrect file name actual file (wrong type)
+test14 - start is after the end time
+test15 - timestep is larger than the end-start
+test16 - timestep is equal to end-start
+test17 - incomplete information
