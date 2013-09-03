@@ -1,0 +1,30 @@
+import vtk
+import sys
+sys.path.append('<<fluidity_source_path>>/python')
+import vtktools
+
+vtuObject = vtktools.vtu('attempt1000000.vtu')
+vtuObject.GetFieldNames()
+gradient = vtuObject.GetScalarField('u')
+ugrid = vtk.vtkUnstructuredGrid()
+gridreader=vtk.vtkXMLUnstructuredGridReader()
+gridreader.SetFileName("attempt1000000.vtu")
+gridreader.Update()
+ugrid = gridreader.GetOutput()
+points = ugrid.GetPoints()
+
+coord_list = []
+
+nPoints = ugrid.GetNumberOfPoints()
+for p in range(0,nPoints):
+    x = (points.GetPoint(p)[:2] + (gradient[p],))
+    points.SetPoint(p,x)
+    
+ugrid.Update()
+
+writer = vtk.vtkUnstructuredGridWriter()
+writer.SetFileName("test.vtu")
+writer.SetInput(ugrid)
+writer.Update()
+writer.Write()
+
