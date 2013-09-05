@@ -20,6 +20,15 @@ def Main():
 
 	return file_name, Verbose, new
 
+def New_File(New):
+	try:
+		NewFile = File(New)
+	except:
+		print 'File name not given for new file. Use -h for more information'
+		sys.exit() 
+	return NewFile
+	
+
 def Parameters(file_name):
 	
 	try: 
@@ -85,21 +94,17 @@ def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, ver
 	return tha, th, sha, sh, topha, toph
 
 
-#if __name__ == "__main__" :
+if __name__ == "__main__" :
 
-fname , verbose, new = Main()
+	fname , verbose, new = Main()
 
-try:
-	NewFile = File(new)
-except:
-	print 'File name not given for new file. Use -h for more information'
-	sys.exit() 
+	NewFile = New_File(new)
 
-start, end, time_step, mesh_int, alpha, initial_conditions = Parameters(fname)
+	start, end, time_step, mesh_int, alpha, initial_conditions = Parameters(fname)
 
-tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose)
+	tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose)
 
-NewFile << toph
+	NewFile << toph
 
 
 
