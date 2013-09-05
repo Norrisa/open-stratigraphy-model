@@ -58,11 +58,12 @@ class SedimentModel:
         # initial guess of solution
         try:
             self.s_1 = interpolate(self.s0, self.V)
-            self.h = interpolate(self.h0, self.V)
+            self.h_1 = interpolate(self.h0, self.V)
         except:
             print 'Your initial condition was not a number or an expression'
             sys.exit()       
         self.s = TrialFunction(self.V)
+	self.h = interpolate(self.h0, self.V)
 
         if (plot_init):
             plot(self.get_sed_height(),interactive=True)

@@ -79,12 +79,14 @@ def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, ver
 
 
 if __name__ == "__main__" :
+	NewFile = File('attempt5.pvd')
 
 	fname , verbose = Main()
 	start, end, time_step, mesh_int, alpha, initial_conditions = Parameters(fname)
 	
-	set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose)
+	tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose)
 
+	NewFile << toph
 
 
 
