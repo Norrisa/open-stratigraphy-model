@@ -83,7 +83,7 @@ def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, ver
 	model.init()
 	model.solve()
 	# answer should be 1 everywhere
-	plot(model.get_total_height(),interactive=True)
+	#plot(model.get_total_height(),interactive=True)
 	print model.get_total_height_array()
 	tha = model.get_total_height_array()
 	th = model.get_total_height()
