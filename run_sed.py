@@ -74,8 +74,13 @@ def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, ver
 	# answer should be 1 everywhere
 	plot(model.get_total_height(),interactive=True)
 	print model.get_total_height_array()
-	answer = model.get_total_height_array()
-	return answer
+	tha = model.get_total_height_array()
+	th = model.get_total_height()
+	sha = model.get_sed_height_array()
+	sh = model.get_sed_height()
+	topha = model.get_topographic_height_array()
+	toph = model.get_topographic_height()
+	return tha, th, sha, sh, topha, toph
 
 
 if __name__ == "__main__" :
