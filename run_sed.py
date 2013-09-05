@@ -11,12 +11,14 @@ def Main():
 	parser = argparse.ArgumentParser(description='input a file name')
 	parser.add_argument('--v','--verbose', action='store_true', help="Verbose output: mainly graphics at each time step", default=False)
 	parser.add_argument('file_name', help='Insert the file name of the simulation you wish to run. It should end with.osml')
+	parser.add_argument('created_file_name', help='Insert the name of the file you are generating. It should end in .pvd')
 	args = parser.parse_args()
 	libspud.clear_options()
 	file_name = args.file_name
 	Verbose = args.v
+	new = args.created_file_name
 
-	return file_name, Verbose
+	return file_name, Verbose, new
 
 def Parameters(file_name):
 	
@@ -83,15 +85,21 @@ def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, ver
 	return tha, th, sha, sh, topha, toph
 
 
-if __name__ == "__main__" :
-	NewFile = File('attempt5.pvd')
+#if __name__ == "__main__" :
 
-	fname , verbose = Main()
-	start, end, time_step, mesh_int, alpha, initial_conditions = Parameters(fname)
-	
-	tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose)
+fname , verbose, new = Main()
 
-	NewFile << toph
+try:
+	NewFile = File(new)
+except:
+	print 'File name not given for new file. Use -h for more information'
+	sys.exit() 
+
+start, end, time_step, mesh_int, alpha, initial_conditions = Parameters(fname)
+
+tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose)
+
+NewFile << toph
 
 
 
