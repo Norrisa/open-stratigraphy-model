@@ -2,6 +2,7 @@ from sediment import *
 from run_sed import*
 from Geom import*
 from converting_z import *
+from Extrude import *
 import libspud
 import sys
 import argparse
@@ -27,8 +28,9 @@ def Main1():
 fname , verbose, new = Main1()
 
 plane = new[:-4] + '000000.vtu'
-slope = new[:-4] + 'slope.pvd'
-Model = new[:-4] + '_model.vtu'
+slope = new[:-4] + '_slope.pvd'
+extrusion = new[:-4] + '_extrusion.vtu'
+model = new[:-4] + '_model.vtu'
 
 NewFile = New_File(new)
 
@@ -40,10 +42,12 @@ NewFile << toph
 
 Creating_z(plane, slope)
 
-Z = Create_Topo(slope,plane)
+Z = Extrude(slope,extrusion,plane,model)
+
+#Z = Create_Topo(slope,plane)
 
 writer = vtk.vtkGenericDataObjectWriter()
-writer.SetFileName(Model)
+writer.SetFileName(model)
 writer.SetInput(Z)
 writer.Update()
 writer.Write()
