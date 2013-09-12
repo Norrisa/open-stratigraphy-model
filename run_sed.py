@@ -24,7 +24,7 @@ def New_File(New):
 	try:
 		NewFile = File(New)
 	except:
-		print 'File name not given for new file. Use -h for more information'
+		print 'File name not given for new file. Use -h for more information. Hint: it should end in .pvd'
 		sys.exit() 
 	return NewFile
 	

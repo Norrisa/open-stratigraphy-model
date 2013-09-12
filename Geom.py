@@ -24,12 +24,12 @@ def Create_Topo(Slope,Plane):
 	append.AddInput(x)
 	append.AddInput(y)
 	data = append.GetOutput()
-	
+
 	d = vtk.vtkDelaunay3D()
 	d.SetInput(data)
 	d.Update
 	d.BoundingTriangulationOff()  
-	d.SetTolerance(0.01)
+	d.SetTolerance(0.00001)
 	d.SetAlpha(0)
 	d.Update()
 	z = d.GetOutput()

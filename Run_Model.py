@@ -44,11 +44,16 @@ Creating_z(plane, slope)
 
 Z = Extrude(slope,extrusion,plane,model)
 
-#Z = Create_Topo(slope,plane)
+Mapper = vtk.vtkPolyDataMapper()
+Mapper.SetInput(Z)
+
+Actor = vtk.vtkActor()
+Actor.SetMapper(Mapper)
+Actor.GetProperty().SetColor(0,0,0)
 
 writer = vtk.vtkGenericDataObjectWriter()
 writer.SetFileName(model)
-writer.SetInput(Z)
+writer.SetInput(Actor)
 writer.Update()
 writer.Write()
 
