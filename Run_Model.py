@@ -1,6 +1,5 @@
 from sediment import *
 from run_sed import*
-from Geom import*
 from converting_z import *
 from Extrude import *
 import libspud
@@ -27,6 +26,7 @@ def Main1():
 
 fname , verbose, new = Main1()
 
+sediment = new[:-4]
 plane = new[:-4] + '000000.vtu'
 slope = new[:-4] + '_slope.pvd'
 extrusion = new[:-4] + '_extrusion.vtu'
@@ -36,24 +36,17 @@ NewFile = New_File(new)
 
 start, end, time_step, mesh_int, alpha, initial_conditions = Parameters(fname)
 
-tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose)
+tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, sediment, verbose)
 
 NewFile << toph
 
-Creating_z(plane, slope)
+Creating_z(plane, slope, sediment, start, end, time_step)
 
-Z = Extrude(slope,extrusion,plane,model)
+Extrude(slope, extrusion, plane, model, sediment, start, end, time_step, mesh_int)
 
-Mapper = vtk.vtkPolyDataMapper()
-Mapper.SetInput(Z)
-
-Actor = vtk.vtkActor()
-Actor.SetMapper(Mapper)
-Actor.GetProperty().SetColor(0,0,0)
-
-writer = vtk.vtkGenericDataObjectWriter()
-writer.SetFileName(model)
-writer.SetInput(Actor)
-writer.Update()
-writer.Write()
+#writer = vtk.vtkGenericDataObjectWriter()
+#writer.SetFileName(model)
+#writer.SetInput(Z)
+#writer.Update()
+#writer.Write()
 
