@@ -55,7 +55,8 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 
 	t = Start_time
 	dt = Time_step
-	et = End_time
+	ET = End_time
+	et = ET-1
 	Save = Sediment + str(t) +'000000.vtu'
 	Import = Sediment + str(t)+ '_sed_slope.pvd'
 	NewSave = Sediment + str(t)+ 'extruded_sed_slope.pvd'
@@ -104,7 +105,7 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 	writer.SetInput(PSE1)
 	writer.Update()
 	writer.Write()
-	print 'a'
+	#print 'a'
 #####################################################################################################################
 
 
@@ -122,7 +123,7 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 		SedimentGridreader2.Update()
 		SedimentGrid2 = SedimentGridreader2.GetOutput()
 		GeomFilt3 = vtk.vtkGeometryFilter()
-		GeomFilt3.SetInput(SedimentGrid1)
+		GeomFilt3.SetInput(SedimentGrid2)
 		GeomFilt3.Update()
 		ExtrudeInput = GeomFilt3.GetOutput()		
 
@@ -145,7 +146,9 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 		PreSurface2 = PSreader2.GetOutput()
 
 		Append = vtk.vtkAppendPolyData()
+
 		Append.AddInput(PreSurface2)
+		Append.AddInput(PSE2)
 
 		DD = Append.GetOutput()
 		DD.Update()
@@ -159,37 +162,44 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 		sedcounter4 = BeginSed
 		Data = DD.GetPoints()
 		
-		
 		mesh = Mesh
 		m = (mesh+1)**2
 		c = t
-		print c, type(c)
+		#print c, type(c)
 		while c != 0:
-			print c, type(c)
+			#print c, type(c)
 			c = (c -1)
-			print c, type(c)
+			#print c, type(c)
 			e = int((c*m)*2)
 			ee = int(e + m)
-			print 'c'
+			#print 'c'
 			for p in range(e,ee):
 				A = Data.GetPoint(p+(2*m))[2:]             #New sediment height
 				B = Data.GetPoint(p)[2:]			# old sediment height
 				C = Data.GetPoint(p+m)[2:]          # old sediment bottom
-				print t
+				#print t
 				if A < B:                                        #If new sediment height is less than old sediment height
 					y = (Data.GetPoint(p)[:2] + Data.GetPoint(p+(2*m))[2:])
-					print 'y = ', y                                 #change the old sediment height
+					#print 'y = ', y                                 #change the old sediment height
 					Data.SetPoint(p,y)
 	
 				if A < C:
 					x = Data.GetPoint(p+m)[:2] + Data.GetPoint(p)[2:]
 					Data.SetPoint((p+m),x)
-		f = int((c*m)*2)
+		f = int((t*m)*2+m)
+		print t
+		print 'f is ', f
 		ff = int(f + m)
+		print 'ff is ', ff
+		print Data.GetPoint(0)
 		for p in range(f,ff):
-			y = PSPoints1.GetPoint(p+m)[2:]
-			x = ExtrudedSedPoints1.GetPoint(p)[:2] + y
-			ExtrudedSedPoints1.SetPoint(p,x)
+			print 'a'
+			y = Data.GetPoint((p-3*m))[2:]
+			print 'b'
+			x = Data.GetPoint(p)[:2] + y
+			print'c'
+			Data.SetPoint(p,x)
+			print 'd'
 
 
 				
@@ -199,13 +209,13 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 		writer.SetInput(DD)
 		writer.Update()
 		writer.Write()
-		print 'b'
+		#print 'b'
 
 
 
 
 
-
+#should grab points from the surface below
 
 
 

@@ -25,7 +25,7 @@ class SedimentModel:
         self.dt = 1
         self.alpha = Constant(1)
         self.inflow_rate = Expression('0')
-        self.output_time = 100000
+        self.output_time = 1
 
     def set_mesh(self,mesh):
         """Set which mesh to use and define function space"""
@@ -94,7 +94,7 @@ class SedimentModel:
         self.s = Function(self.V)   # the unknown at a new time level
         self.T = self.end_time      # total simulation time
 
-    def solve(self):
+    def solve(self, Sediment):
         """Solve the problem"""
         t = self.start_time
         while t <= self.T:
@@ -102,14 +102,17 @@ class SedimentModel:
             solve(self.A, self.s.vector(), self.b)
 
             self.b = assemble(self.L, tensor=self.b, exterior_facet_domains=self.exterior_facet_domains)
-            t += self.dt
             #plot(u, interactive=True)
             self.s_1.assign(self.s)
-            #if (t%self.output_time == 0):
+            save = ''
+            if (t%self.output_time == 0):
                 #plot(self.get_total_height(),interactive=True)
-
+                save = Sediment + str(t) +'.pvd'
+                NewSave = File(save)
+                NewSave << self.s_1
+            t += self.dt
     def get_total_height_array(self):
-        return self.s_1.vector().array()+self.h.vector().array()
+        return self.s_1.vector().array()+self.h_1.vector().array()
 
     def get_total_height(self):
         return self.s_1+self.h

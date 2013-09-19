@@ -63,7 +63,7 @@ def Parameters(file_name):
 	return start, end, time_step, mesh_int, alpha, initial_conditions
 
 
-def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, verbose = 'false'):
+def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, sediment, verbose = 'false'):
 	#create a simple testcase
 	model = SedimentModel()
 	mesh = UnitSquareMesh(mesh_int,mesh_int)
@@ -81,10 +81,10 @@ def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, ver
 	model.set_end_time(end)
 	model.set_diffusion_coeff(alpha)
 	model.init()
-	model.solve()
+	model.solve(sediment)
 	# answer should be 1 everywhere
 	#plot(model.get_total_height(),interactive=True)
-	print model.get_total_height_array()
+	#print model.get_total_height_array()
 	tha = model.get_total_height_array()
 	th = model.get_total_height()
 	sha = model.get_sed_height_array()
