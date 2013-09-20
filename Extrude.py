@@ -105,7 +105,7 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 	writer.SetInput(PSE1)
 	writer.Update()
 	writer.Write()
-	#print 'a'
+
 #####################################################################################################################
 
 
@@ -165,42 +165,27 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 		mesh = Mesh
 		m = (mesh+1)**2
 		c = t
-		#print c, type(c)
 		while c != 0:
-			#print c, type(c)
 			c = (c -1)
-			#print c, type(c)
 			e = int((c*m)*2)
 			ee = int(e + m)
-			#print 'c'
 			for p in range(e,ee):
 				A = Data.GetPoint(p+(2*m))[2:]             #New sediment height
 				B = Data.GetPoint(p)[2:]			# old sediment height
 				C = Data.GetPoint(p+m)[2:]          # old sediment bottom
-				#print t
 				if A < B:                                        #If new sediment height is less than old sediment height
 					y = (Data.GetPoint(p)[:2] + Data.GetPoint(p+(2*m))[2:])
-					#print 'y = ', y                                 #change the old sediment height
-					Data.SetPoint(p,y)
+            				Data.SetPoint(p,y)
 	
 				if A < C:
 					x = Data.GetPoint(p+m)[:2] + Data.GetPoint(p)[2:]
 					Data.SetPoint((p+m),x)
 		f = int((t*m)*2+m)
-		print t
-		print 'f is ', f
 		ff = int(f + m)
-		print 'ff is ', ff
-		print Data.GetPoint(0)
 		for p in range(f,ff):
-			print 'a'
 			y = Data.GetPoint((p-3*m))[2:]
-			print 'b'
 			x = Data.GetPoint(p)[:2] + y
-			print'c'
 			Data.SetPoint(p,x)
-			print 'd'
-
 
 				
 
@@ -209,7 +194,6 @@ def Extrude(Slope,Extrusion,Plane,Model,Sediment,Start_time,End_time,Time_step,M
 		writer.SetInput(DD)
 		writer.Update()
 		writer.Write()
-		#print 'b'
 
 
 

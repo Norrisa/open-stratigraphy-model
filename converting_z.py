@@ -19,7 +19,6 @@ def Creating_z(Plane,Slope,Sediment,Start_time,End_time,Time_step):
 	for p in range(0,nPoints):
 		x = (points.GetPoint(p)[:2] + (gradient[p],))
 		points.SetPoint(p,x)
-		#print x
     
 	ugrid.Update()
 ###################################################################################################################
@@ -43,10 +42,7 @@ def Creating_z(Plane,Slope,Sediment,Start_time,End_time,Time_step):
 		for p in range(0,nPoints):
 			x = ((s.GetPoint(p)[0],) + (s.GetPoint(p)[1],) + ((gradientSed[p]+gradient[p]),))
 			s.SetPoint(p,x)
-			#print x
-			
-		#print t, x
-#		vtuObjectSed.AddScalarField('t'),
+
 		writer = vtk.vtkUnstructuredGridWriter()
 		writer.SetFileName(NewSave)
 		writer.SetInput(sedgrid)
