@@ -46,7 +46,7 @@ def Creating_z(Plane,Slope,Sediment,Start_time,End_time,Time_step):
 			#print x
 			
 		#print t, x
-
+#		vtuObjectSed.AddScalarField('t'),
 		writer = vtk.vtkUnstructuredGridWriter()
 		writer.SetFileName(NewSave)
 		writer.SetInput(sedgrid)

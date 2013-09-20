@@ -38,8 +38,12 @@
             <a:documentation>The diffusion coefficient will be a number that should be between...</a:documentation>
             <data type="double"/>
           </element>
-          <element name="initial_conditions">
-            <a:documentation>Initial topography and sediment conditions. This should either be a number or an expression such as x[0] </a:documentation>
+          <element name="topography_conditions">
+            <a:documentation>Initial topography conditions. This should either be a number or an expression such as x[0]</a:documentation>
+            <ref name="anystring"/>
+          </element>
+          <element name="sediment_conditions">
+            <a:documentation>Initial sediment conditions. This should either be a number or an expression such as x[0]</a:documentation>
             <ref name="anystring"/>
           </element>
         </element>

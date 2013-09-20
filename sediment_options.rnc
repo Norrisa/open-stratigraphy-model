@@ -37,11 +37,17 @@ start =
                element diffusion_coefficient {
                   xsd:double
                },
-               ## Initial topography and sediment conditions. This should either be a number or an expression such as x[0] 
-               element initial_conditions {
+               ## Initial topography conditions. This should either be a number or an expression such as x[0]
+               element topography_conditions {
+                  anystring
+               },
+               ## Initial sediment conditions. This should either be a number or an expression such as x[0]
+               element sediment_conditions {
                   anystring
                }
             }
          }
       }
    )
+
+

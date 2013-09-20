@@ -34,9 +34,9 @@ model = new[:-4] + '_model.vtu'
 
 NewFile = New_File(new)
 
-start, end, time_step, mesh_int, alpha, initial_conditions = Parameters(fname)
+start, end, time_step, mesh_int, alpha, initial_conditions, sediment_conditions = Parameters(fname)
 
-tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, sediment, verbose)
+tha, th, sha, sh, topha, toph = set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, sediment_conditions, sediment, verbose)
 
 NewFile << toph
 

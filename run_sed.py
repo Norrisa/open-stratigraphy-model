@@ -43,7 +43,8 @@ def Parameters(file_name):
 		time_step = float(libspud.get_option('/diffusion_model/timestepping/timestep'))
 		mesh_int = int(libspud.get_option('/diffusion_model/mesh/initial_mesh_size'))
 		alpha = float(libspud.get_option('/diffusion_model/model_parameters/diffusion_coefficient'))
-		initial_conditions = str(libspud.get_option('/diffusion_model/model_parameters/initial_conditions'))
+		initial_conditions = str(libspud.get_option('/diffusion_model/model_parameters/topography_conditions'))
+		sediment_conditions =str(libspud.get_option('/diffusion_model/model_parameters/sediment_conditions'))
 	except: 
 		print 'The information provided was incomplete, please recreate the file'
 		sys.exit()
@@ -60,20 +61,21 @@ def Parameters(file_name):
 	elif ((end - start) < time_step):
 		print 'The time step is too large for the total time'
 		sys.exit()
-	return start, end, time_step, mesh_int, alpha, initial_conditions
+	return start, end, time_step, mesh_int, alpha, initial_conditions, sediment_conditions
 
 
-def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, sediment, verbose = 'false'):
+def set_up_model(start, end, time_step, mesh_int, alpha, initial_conditions, sediment_conditions, sediment, verbose = 'false'):
 	#create a simple testcase
 	model = SedimentModel()
 	mesh = UnitSquareMesh(mesh_int,mesh_int)
 	model.set_mesh(mesh)
 	try:
 		init_cond = Expression(initial_conditions) # simple slope
+		init_sed = Expression(sediment_conditions)
 	except:
-		print 'Your initial condition was not a function'
+		print 'Your initial conditions were not valid functions'
 		sys.exit()
-	init_sed = Expression('x[0]') # this gives
+	#init_sed = Expression('x[0]') # this gives
 	# total of above gives a slope of 0 to 2 (over the unit square)
 	model.set_initial_conditions(init_cond,init_sed)
 	model.set_start_time(start)
